@@ -5,13 +5,29 @@ import java.nio.Buffer;
 import java.util.Scanner;
 
 
-
 public class Main {
 
     static Scanner in = new Scanner(System.in);
     static String name = "";
     static int timer = 30;
-
+    static String [][] songDataSet = {
+            {"Bohemian Rhapsody", "Rock", "Path 1"},
+            {"Stairway to Heaven", "Rock", "Path 2"},
+            {"Hotel California", "Rock", "Path 3"},
+            {"Imagine", "Rock", "Path 4"},
+            {"Smells Like Teen Spirit", "Rock", "Path 5"},
+            {"Hey Jude", "Rock", "Path 6"},
+            {"Sweet Child O' Mine", "Rock", "Path 7"},
+            {"Comfortably Numb", "Rock", "Path 8"},
+            {"Another Brick in the Wall", "Rock", "Path 9"},
+            {"Dream On", "Rock", "Path 10"},
+            {"Let It Be", "Rock", "Path 11"},
+            {"Purple Haze", "Rock", "Path 12"},
+            {"Don't Stop Believin'", "Rock", "Path 13"},
+            {"Wish You Were Here", "Rock", "Path 14"},
+            {"Back In Black", "Rock", "Path 15"},
+            {"Back In Black", "Roack", "Path 15"},
+    };
 
     public static void main(String[] args) throws InterruptedException, IOException {
         /*
@@ -32,9 +48,10 @@ public class Main {
 
         System.out.println("Hey there");
         System.out.println("hope you are having a wonderful day");
-        System.out.println("And that playing this will make your day better and fun");
+        System.out.println("And that playing this will make your day better and more fun");
         System.out.println("what shall i call you");
         name = in.nextLine();
+        clearConsole();
 
         System.out.println("What is the genre you would like to play");
         System.out.println("the genres are - ");
@@ -49,6 +66,7 @@ public class Main {
         while(true) {
            try{
                sgenre = in.nextLine();
+               sgenre = sgenre.trim();
                genre = Integer.parseInt(sgenre);
 
                // checking if the user has entered something which isnt in the domain
@@ -64,11 +82,7 @@ public class Main {
                System.out.println("Pls enter a number between 1 and 5");
            }
         }
-
-
-
-
-        // creating a switch case for the genre which the user has entered
+       // creating a switch case for the genre which the user has entered
         switch (genre) {
             case 1 -> rock();
             case 2 -> popMusic();
@@ -82,13 +96,28 @@ public class Main {
     }
     // if the user wants to rock
     static void rock() throws IOException, InterruptedException {
-        int answer = 1, res = 0;
-        for (int i = 0; i < 7; i++) {
 
-            System.out.println("so " + name + " i see that you are a big fan of rock");
-            System.out.println("So lets see how many cna you get right");
+        // this is for the name, genre path
+        // the reason why i do it this was is because it is a lot more consize  for now
+        Songs [] songs = new Songs[15];
+        int answer = 1, res = 0, num = 0;
+
+        for (int i = 0; i < songDataSet.length; i++) {
+            if (songDataSet[i][1].equals("Rock"))
+                songs[i] = new Songs(songDataSet[i][0], songDataSet[i][1], songDataSet[i][2]);
+        }
+        for(Songs song : songs){
+            System.out.println(song.name +" " + song.genre + " " + song.path);
+        }
+
+        for (int i = 0; i < 7; i++) {
+            clearConsole();
+            System.out.println("So lets see how many can you get right");
             System.out.println("GUESS THE TUNE");
             timer = timer(timer);
+            if (timer <= 0){
+                break;
+            }
             System.out.println("So I am assuming you know that fine tune");
             System.out.println("So here are your options");
             System.out.println("1 - somehting");
@@ -98,7 +127,7 @@ public class Main {
                 System.out.println("you got it right nice job");
             }
         }
-
+        clearConsole();
         System.out.println("you in the end got " + res + " right");
         System.out.println("lets goooooo");
     }
@@ -120,6 +149,7 @@ public class Main {
     static int timer(int remainTime) throws InterruptedException, IOException {
         String check = "";
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+
         while (remainTime > 0) {
 
             if(reader.ready()){
@@ -129,6 +159,7 @@ public class Main {
                 }
                 break;
             }
+
             System.out.println("remaing sec " + remainTime);
             Thread.sleep(1000);
             remainTime--;
@@ -136,4 +167,27 @@ public class Main {
 
         return remainTime;
     }
+
+    public static void clearConsole() {
+        try {
+            // checks what is the specific opreating system which the person is using
+            String os = System.getProperty("os.name").toLowerCase();
+
+
+            if (os.contains("win")) {
+                // the processbuilder is to create process for the opreating system.
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+            } else {
+                // same thing but if the person is using something other than window
+                // meaning that clear will always work as for mac its clear
+                // as well for all of the destros for linux its clear as well
+                new ProcessBuilder("clear").inheritIO().start().waitFor();
+            }
+        } catch (Exception e) {
+            // if for some reason there is an error inside the terminal
+            System.out.println("Error clearing console: " + e.getMessage());
+        }
+    }
+
+
 }
